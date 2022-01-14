@@ -45,14 +45,7 @@ namespace AdventOfCode2021
                     }
                 }
 
-                if (isOxygenRating)
-                {
-                    OxygenGeneratorFilter(ref lines, ref filteredStrings, index, toAdd, sameMax);
-                }
-                else
-                {
-                    CO2ScrubberFilter(ref lines, ref filteredStrings, index, toAdd, sameMax);
-                }
+                FilterArraysOfStrings(ref lines, ref filteredStrings, index, toAdd, sameMax, isOxygenRating);
 
                 index++;
 
@@ -65,42 +58,30 @@ namespace AdventOfCode2021
             return Convert.ToInt32(filteredStrings.First(), 2);
         }
 
-        private static void OxygenGeneratorFilter(ref string[] lines, ref List<string> filteredStringsForOxygen, int index, char toAdd, bool sameMax)
+        private static void FilterArraysOfStrings(ref string[] lines, ref List<string> filteredStringsForOxygen, 
+                                                  int index, char toAdd, bool sameMax, bool isOxygenRating)
         {
             if (sameMax)
             {
                 if (filteredStringsForOxygen.Count > 1)
                 {
-                    filteredStringsForOxygen = filteredStringsForOxygen.Where(line => line[index] == '1').ToList();
-                    lines = lines.Where(line => line.First() == '1').ToArray();
+                    filteredStringsForOxygen = filteredStringsForOxygen.Where(line => line[index] == (isOxygenRating ? '1' : '0'))
+                                                                       .ToList();
+                    lines = lines.Where(line => line.First() == (isOxygenRating ? '1' : '0'))
+                                 .ToArray();
                 }
             }
             else
             {
                 if (filteredStringsForOxygen.Count > 1)
                 {
-                    filteredStringsForOxygen = filteredStringsForOxygen.Where(line => line[index] == toAdd).ToList();
-                    lines = lines.Where(line => line.First() == toAdd).ToArray();
-                }
-            }
-        }
+                    filteredStringsForOxygen = filteredStringsForOxygen.Where(line => isOxygenRating ? (line[index] == toAdd) : 
+                                                                                                       (line[index] != toAdd))
+                                                                       .ToList();
 
-        private static void CO2ScrubberFilter(ref string[] lines, ref List<string> filteredStringsForScrubber, int index, char toAdd, bool sameMax)
-        {
-            if (sameMax)
-            {
-                if (filteredStringsForScrubber.Count > 1)
-                {
-                    filteredStringsForScrubber = filteredStringsForScrubber.Where(line => line[index] == '0').ToList();
-                    lines = lines.Where(line => line.First() == '0').ToArray();
-                }
-            }
-            else
-            {
-                if (filteredStringsForScrubber.Count > 1)
-                {
-                    filteredStringsForScrubber = filteredStringsForScrubber.Where(line => line[index] != toAdd).ToList();
-                    lines = lines.Where(line => line.First() != toAdd).ToArray();
+                    lines = lines.Where(line => isOxygenRating ? (line.First() == toAdd) : 
+                                                                 (line.First() != toAdd))
+                                 .ToArray();
                 }
             }
         }
