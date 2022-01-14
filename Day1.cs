@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace AdventOfCode2021
 {
-    internal class Day1
+    internal class Day1 : IDaySolution
     {
-
-        public static int GetResult(string inputPath)
+        public int GetResult(string inputPath)
         {
             string[] lines = File.ReadAllLines(inputPath);
 
